@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank | Dashboard</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #263247;
+        }
+
+        header {
+            background: #101827;
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { font-size: 26px; font-weight: bold; }
+        .logo span { color: #36b6e9; }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:disabled { opacity: .6; cursor: wait; }
+
+        .logout { background: #e63946; color: white; }
+
+        main {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        h1 { margin-bottom: 8px; }
+        .muted { color: #697789; line-height: 1.6; }
+
+        .balance-card {
+            margin-top: 28px;
+            padding: 28px;
+            border-radius: 18px;
+            color: white;
+            background: linear-gradient(135deg, #123d78, #087eaa);
+            box-shadow: 0 10px 25px #17365c22;
+        }
+
+        .balance-card p { margin: 0 0 12px; }
+
+        .balance {
+            font-size: clamp(32px, 6vw, 46px);
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .notice {
+            background: #e7f4fc;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 24px 0;
+            color: #285675;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 4px 18px #152b4610;
+            min-width: 0;
+        }
+
+        .card .emoji { font-size: 30px; }
+        .card h2 { font-size: 19px; }
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd5e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .primary {
+            background: #1769aa;
+            color: white;
+            margin-top: 12px;
+        }
+
+        .message {
+            margin-top: 14px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .success { color: #18845d; }
+        .error { color: #b42318; }
+
+        .transaction-list { margin-top: 18px; }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        .transaction-item:last-child { border-bottom: none; }
+
+        .transaction-title {
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .transaction-date {
+            color: #697789;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .money-in { color: #18845d; }
+        .money-out { color: #b42318; }
+
+        footer {
+            margin-top: 45px;
+            padding: 24px;
+            text-align: center;
+            color: #697789;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Secure<span>Bank</span></div>
+    <button class="logout" id="logoutButton">Logout</button>
+</header>
+
+<main>
+
+    <h1 id="welcome">Welcome to SecureBank!</h1>
+    <p class="muted">Manage your SecureBank demo account.</p>
+
+    <section class="balance-card">
+        <p>Available Demo Balance</p>
+        <div class="balance" id="balance">Loading...</div>
+        <p id="accountEmail">Loading your account...</p>
+    </section>
+
+    <div class="notice">
+        <strong>Educational demo only:</strong>
+        Deposits and transfers use simulated funds.
+        This is not a real bank.
+    </div>
+
+    <section class="grid">
+
+        <!-- Account information -->
+        <article class="card">
+            <div class="emoji">👤</div>
+            <h2>My Account</h2>
+            <p class="muted">Your registered account information.</p>
+
+            <p id="accountName">Loading account details...</p>
+            <p id="registeredOn" class="muted"></p>
+
+            <button class="primary" id="refreshButton">
+                Refresh Account
+            </button>
+        </article>
+
+        <!-- Deposit -->
+        <article class="card">
+            <div class="emoji">💰</div>
+            <h2>Demo Deposit</h2>
+            <p class="muted">Add simulated funds to your demo balance.</p>
+
+            <form id="depositForm">
+                <label for="depositAmount">Deposit amount (₹)</label>
+
+                <input
+                    type="number"
+                    id="depositAmount"
+                    min="0.01"
+                    max="100000"
+                    step="0.01"
+                    placeholder="e.g. 500"
+                    required
+                >
+
+                <button class="primary" id="depositButton" type="submit">
+                    Add Demo Funds
+                </button>
+            </form>
+
+            <p id="depositMessage" class="message"
+               role="status" aria-live="polite"></p>
+        </article>
+
+        <!-- Transfer -->
+        <article class="card">
+            <div class="emoji">💸</div>
+            <h2>Transfer Money</h2>
+
+            <p class="muted">
+                Transfer demo funds to another registered SecureBank user.
+            </p>
+
+            <form id="transferForm">
+                <label for="recipientEmail">Recipient's registered email</label>
+
+                <input
+                    type="email"
+                    id="recipientEmail"
+                    maxlength="150"
+                    placeholder="recipient@example.com"
+                    required
+                >
+
+                <label for="transferAmount">Transfer amount (₹)</label>
+
+                <input
+                    type="number"
+                    id="transferAmount"
+                    min="0.01"
+                    max="100000"
+                    step="0.01"
+                    placeholder="e.g. 250"
+                    required
+                >
+
+                <button class="primary" id="transferButton" type="submit">
+                    Transfer Demo Funds
+                </button>
+            </form>
+
+            <p id="transferMessage" class="message"
+               role="status" aria-live="polite"></p>
+        </article>
+
+        <!-- Transaction history -->
+        <article class="card">
+            <div class="emoji">📊</div>
+            <h2>Transaction History</h2>
+
+            <p class="muted">
+                View your deposits and money transfers.
+            </p>
+
+            <button
+                class="primary"
+                id="refreshTransactionsButton"
+                type="button"
+            >
+                Refresh Transactions
+            </button>
+
+            <div
+                id="transactionList"
+                class="transaction-list"
+                aria-live="polite"
+            >
+                Loading transactions...
+            </div>
+        </article>
+
+    </section>
+
+</main>
+
+<footer>
+    SecureBank Educational Project · Not a real banking service
+</footer>
+
+<script>
+    function formatRupees(value) {
+        return new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(Number(value));
+    }
+
+    async function readResponse(response) {
+        const data = await response.json().catch(() => ({}));
+
+        if (response.status === 401) {
+            window.location.href = "/login.html";
+            throw new Error("Please log in again.");
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || data.message || "The request failed."
+            );
+        }
+
+        return data;
+    }
+
+    // Load account information
+    async function loadAccount() {
+        try {
+            const response = await fetch("/api/account", {
+                credentials: "same-origin"
+            });
+
+            const data = await readResponse(response);
+
+            document.getElementById("welcome").textContent =
+                "Welcome, " + data.fullName + "!";
+
+            document.getElementById("balance").textContent =
+                formatRupees(data.balance);
+
+            document.getElementById("accountEmail").textContent =
+                data.email;
+
+            document.getElementById("accountName").textContent =
+                data.fullName;
+
+            document.getElementById("registeredOn").textContent =
+                data.createdAt
+                    ? "Registered: " +
+                      new Date(data.createdAt).toLocaleString()
+                    : "";
+
+        } catch (error) {
+            document.getElementById("balance").textContent =
+                "Unavailable";
+
+            document.getElementById("accountName").textContent =
+                error.message;
+        }
+    }
+
+    // Load transaction history
+    async function loadTransactions() {
+        const list = document.getElementById("transactionList");
+
+        list.textContent = "Loading transactions...";
+
+        try {
+            const response = await fetch("/api/transactions", {
+                credentials: "same-origin"
+            });
+
+            const transactions = await readResponse(response);
+
+            list.replaceChildren();
+
+            if (!Array.isArray(transactions) || transactions.length === 0) {
+                list.textContent = "No transactions yet.";
+                return;
+            }
+
+            transactions.forEach(transaction => {
+                const item = document.createElement("div");
+                item.className = "transaction-item";
+
+                const details = document.createElement("div");
+
+                const title = document.createElement("div");
+                title.className = "transaction-title";
+                title.textContent =
+                    transaction.description ||
+                    transaction.type ||
+                    "Transaction";
+
+                const date = document.createElement("div");
+                date.className = "transaction-date";
+
+                date.textContent = transaction.createdAt
+                    ? new Date(transaction.createdAt).toLocaleString()
+                    : "Date unavailable";
+
+                details.append(title, date);
+
+                const amount = document.createElement("div");
+                amount.className = "transaction-amount";
+
+                const isIncoming =
+                    transaction.type === "DEPOSIT" ||
+                    transaction.type === "TRANSFER_IN";
+
+                amount.classList.add(
+                    isIncoming ? "money-in" : "money-out"
+                );
+
+                amount.textContent =
+                    (isIncoming ? "+" : "−") +
+                    formatRupees(transaction.amount);
+
+                item.append(details, amount);
+                list.appendChild(item);
+            });
+
+        } catch (error) {
+            list.textContent =
+                error.message || "Could not load transactions.";
+        }
+    }
+
+    // Deposit demo funds
+    document.getElementById("depositForm")
+        .addEventListener("submit", async event => {
+
+            event.preventDefault();
+
+            const amountInput =
+                document.getElementById("depositAmount");
+
+            const button =
+                document.getElementById("depositButton");
+
+            const message =
+                document.getElementById("depositMessage");
+
+            const amount = Number(amountInput.value);
+
+            message.className = "message";
+            message.textContent = "";
+
+            if (
+                !Number.isFinite(amount) ||
+                amount <= 0 ||
+                amount > 100000 ||
+                Math.round(amount * 100) !== amount * 100
+            ) {
+                message.className = "message error";
+                message.textContent =
+                    "Enter an amount up to ₹100,000 with at most two decimal places.";
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Processing...";
+
+            try {
+                const response = await fetch("/api/account/deposit", {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        amount: amountInput.value
+                    })
+                });
+
+                const data = await readResponse(response);
+
+                message.className = "message success";
+                message.textContent =
+                    data.message || "Demo deposit successful.";
+
+                amountInput.value = "";
+
+                await Promise.all([
+                    loadAccount(),
+                    loadTransactions()
+                ]);
+
+            } catch (error) {
+                message.className = "message error";
+                message.textContent = error.message;
+
+            } finally {
+                button.disabled = false;
+                button.textContent = "Add Demo Funds";
+            }
+        });
+
+    // Transfer demo funds
+    document.getElementById("transferForm")
+        .addEventListener("submit", async event => {
+
+            event.preventDefault();
+
+            const emailInput =
+                document.getElementById("recipientEmail");
+
+            const amountInput =
+                document.getElementById("transferAmount");
+
+            const button =
+                document.getElementById("transferButton");
+
+            const message =
+                document.getElementById("transferMessage");
+
+            const amount = Number(amountInput.value);
+
+            message.className = "message";
+            message.textContent = "";
+
+            if (
+                !Number.isFinite(amount) ||
+                amount <= 0 ||
+                amount > 100000 ||
+                Math.round(amount * 100) !== amount * 100
+            ) {
+                message.className = "message error";
+                message.textContent =
+                    "Enter an amount up to ₹100,000 with at most two decimal places.";
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Transferring...";
+
+            try {
+                const response = await fetch("/api/transfer", {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        recipientEmail: emailInput.value.trim(),
+                        amount: amountInput.value
+                    })
+                });
+
+                const data = await readResponse(response);
+
+                message.className = "message success";
+
+                message.textContent =
+                    (data.message || "Demo transfer successful.") +
+                    (data.balance !== undefined
+                        ? " Your new balance is " +
+                          formatRupees(data.balance) + "."
+                        : "");
+
+                amountInput.value = "";
+
+                await Promise.all([
+                    loadAccount(),
+                    loadTransactions()
+                ]);
+
+            } catch (error) {
+                message.className = "message error";
+                message.textContent =
+                    error.message || "Transfer failed.";
+
+            } finally {
+                button.disabled = false;
+                button.textContent = "Transfer Demo Funds";
+            }
+        });
+
+    // Refresh account
+    document.getElementById("refreshButton")
+        .addEventListener("click", loadAccount);
+
+    // Refresh transaction history
+    document.getElementById("refreshTransactionsButton")
+        .addEventListener("click", loadTransactions);
+
+    // Logout
+    document.getElementById("logoutButton")
+        .addEventListener("click", async () => {
+
+            try {
+                await fetch("/api/auth/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+
+            } finally {
+                window.location.href = "/login.html";
+            }
+        });
+
+    // Initial page loading
+    loadAccount();
+    loadTransactions();
+</script>
+
+</body>
+</html>

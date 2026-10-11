@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | SecureBank</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #071a36, #124e78);
+            color: #172033;
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            max-width: 100%;
+            min-height: 530px;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .left {
+            width: 42%;
+            padding: 40px 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            background: linear-gradient(160deg, #123b66, #087e8b);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .logo span {
+            color: #63e6d2;
+        }
+
+        .left h1 {
+            font-size: 30px;
+            line-height: 1.35;
+            margin-bottom: 18px;
+        }
+
+        .left p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #e0f4ff;
+        }
+
+        .security {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .right {
+            flex: 1;
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            color: #102c4e;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34445b;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d7dfeb;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #087e8b;
+            box-shadow: 0 0 0 3px rgba(8, 126, 139, 0.12);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #087e8b;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #066571;
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        #message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #message.success {
+            display: block;
+            background: #e7f8ee;
+            color: #17683a;
+        }
+
+        #message.error {
+            display: block;
+            background: #fff0f0;
+            color: #a52121;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 25px;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: #087e8b;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #9aa5b5;
+            font-size: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left {
+                width: 100%;
+                padding: 28px;
+            }
+
+            .left h1 {
+                font-size: 25px;
+            }
+
+            .logo {
+                margin-bottom: 18px;
+            }
+
+            .security {
+                margin-top: 18px;
+            }
+
+            .right {
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <section class="left">
+        <div class="logo">Secure<span>Bank</span></div>
+
+        <h1>Welcome back!</h1>
+
+        <p>
+            Sign in to your SecureBank demo account and continue
+            exploring your banking dashboard.
+        </p>
+
+        <div class="security">
+            🔒 <strong>Secure sign-in</strong><br>
+            Your password is verified on the server and is never
+            sent back to the browser.
+        </div>
+    </section>
+
+    <section class="right">
+        <h2>Sign In</h2>
+
+        <p class="subtitle">
+            Enter your registered email and password.
+        </p>
+
+        <div id="message" role="status" aria-live="polite"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    autocomplete="username"
+                    maxlength="150"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    maxlength="72"
+                    required
+                >
+            </div>
+
+            <button type="submit" id="loginButton">Sign In</button>
+        </form>
+
+        <div class="links">
+            Don't have an account?
+            <a href="/register.html">Create one</a>
+        </div>
+
+        <div class="footer">
+            SecureBank Educational Demo · Not a real banking service
+        </div>
+    </section>
+</div>
+
+<script>
+    const form = document.getElementById("loginForm");
+    const button = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = type;
+    }
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        button.disabled = true;
+        button.textContent = "Signing in...";
+        message.className = "";
+
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showMessage("Login successful! Opening dashboard...", "success");
+
+                window.location.href = "/dashboard";
+            } else {
+                showMessage(
+                    result.error || "Invalid email or password.",
+                    "error"
+                );
+            }
+        } catch (error) {
+            console.error(error);
+
+            showMessage(
+                "Cannot connect to the server. Please try again.",
+                "error"
+            );
+        } finally {
+            button.disabled = false;
+            button.textContent = "Sign In";
+        }
+    });
+</script>
+</body>
+</html>

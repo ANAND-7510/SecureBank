@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank | Digital Banking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            color: #152443;
+        }
+
+        header {
+            background: #071b3d;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #42d6b5;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 24px;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #071b3d, #164e87);
+            color: white;
+            padding: 90px 8%;
+            min-height: 420px;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 58px);
+            max-width: 650px;
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .hero p {
+            max-width: 560px;
+            line-height: 1.8;
+            color: #d8e7f7;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #42d6b5;
+            color: #071b3d;
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .features {
+            padding: 55px 8%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px #12274a0d;
+        }
+
+        .card h3 {
+            margin: 14px 0;
+        }
+
+        .card p {
+            color: #627089;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: #071b3d;
+            color: #c8d5e8;
+            text-align: center;
+            padding: 25px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Secure<span>Bank</span></div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Banking made simple. Security made stronger.</h1>
+            <p>
+                Welcome to SecureBank, a modern digital banking
+                experience designed around simplicity, transparency,
+                and security.
+            </p>
+            <a class="button" href="/login.html">Explore Banking</a>
+        </section>
+
+        <section class="features" id="features">
+            <article class="card">
+                <div>🔐</div>
+                <h3>Secure Access</h3>
+                <p>Designed with security and privacy at its core.</p>
+            </article>
+
+            <article class="card">
+                <div>💳</div>
+                <h3>Account Management</h3>
+                <p>A convenient place to view your banking information.</p>
+            </article>
+
+            <article class="card">
+                <div>↗️</div>
+                <h3>Easy Transfers</h3>
+                <p>A foundation for learning how digital transfers work.</p>
+            </article>
+        </section>
+
+        <section class="features" id="about">
+            <article class="card">
+                <h3>About SecureBank</h3>
+                <p>
+                    SecureBank is an educational banking project built
+                    using Java and Spring Boot.
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        SecureBank — Educational Project · No real banking services
+    </footer>
+</body>
+</html>
+```
